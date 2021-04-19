@@ -3,6 +3,7 @@ package com.example.paging3.UI
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.paging3.Adapter.DogsAdapter
@@ -25,10 +26,12 @@ class MainActivity : AppCompatActivity() {
         initRecyclerview()
         lifecycleScope.launchWhenStarted {
             mainViewModel.getAllDogs.collectLatest { response->
+                binding.apply {
+                   progressBar.isVisible=false
+                    recyclerview.isVisible=true
+                }
                 dogsAdapter.submitData(response)
             }
-
-
         }
     }
 
@@ -38,8 +41,8 @@ class MainActivity : AppCompatActivity() {
                 setHasFixedSize(true)
                 layoutManager = GridLayoutManager(this@MainActivity,2)
                 adapter = dogsAdapter.withLoadStateHeaderAndFooter(
-                    header = LoaderStateAdapter { dogsAdapter.retry() },
-                    footer = LoaderStateAdapter{dogsAdapter.retry()}
+                    header = LoaderStateAdapter { dogsAdapter :: retry},
+                    footer = LoaderStateAdapter{dogsAdapter :: retry}
                 )
             }
         }

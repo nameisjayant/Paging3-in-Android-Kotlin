@@ -31,5 +31,4 @@ constructor(private val apiService: ApiService) : PagingSource<Int,Dogs>() {
     override fun getRefreshKey(state: PagingState<Int, Dogs>): Int? {
      return null
     }
-
 }
