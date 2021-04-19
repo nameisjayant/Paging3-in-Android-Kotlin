@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.paging3.Adapter.DogsAdapter
+import com.example.paging3.Adapter.LoaderStateAdapter
 import com.example.paging3.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -36,7 +37,10 @@ class MainActivity : AppCompatActivity() {
             recyclerview.apply {
                 setHasFixedSize(true)
                 layoutManager = GridLayoutManager(this@MainActivity,2)
-                adapter = dogsAdapter
+                adapter = dogsAdapter.withLoadStateHeaderAndFooter(
+                    header = LoaderStateAdapter { dogsAdapter.retry() },
+                    footer = LoaderStateAdapter{dogsAdapter.retry()}
+                )
             }
         }
     }
